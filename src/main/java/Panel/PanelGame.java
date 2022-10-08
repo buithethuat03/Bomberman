@@ -26,18 +26,14 @@ public class PanelGame extends JPanel implements Runnable {
     Thread game_thread;
     Player player;
 
+    Portal portal;
     List<Balloom> ballooms = new ArrayList<>();
-    //Balloom []balloomList = new Balloom[4];
     Bomb bomb;
 
     TileManager tle = new TileManager(this);
 
     void initEntityAndObject() {
         player = new Player(this, key);
-
-//        for (int i = 0; i < 4; i++) {
-//            balloomList[i] = new Balloom(this);
-//        }
         int[][] mapTileNum = new int [maxScreenRow][maxScreenCol];
         try {
             File fileReader = new File("src/main/resources/data/map1.txt");
@@ -63,18 +59,6 @@ public class PanelGame extends JPanel implements Runnable {
             e.printStackTrace();
         }
     }
-
-    void setupEntityAndObject() {
-        try {
-            //player.setLocation(72, 72);
-//            balloomList[0].setLocationAndDirection(36, 0, "right");
-//            balloomList[1].setLocationAndDirection(108, 36, "right");
-//            balloomList[2].setLocationAndDirection(36, 36, "down");
-//            balloomList[3].setLocationAndDirection(144, 36, "down");
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
     public PanelGame() {
         this.setPreferredSize(new Dimension(screen_width, screen_height));
         this.setBackground(Color.DARK_GRAY);
@@ -91,7 +75,6 @@ public class PanelGame extends JPanel implements Runnable {
     @Override
     public void run() {
         initEntityAndObject();
-        setupEntityAndObject();
         while (game_thread != null) {
             long start = System.nanoTime();
 
@@ -113,7 +96,9 @@ public class PanelGame extends JPanel implements Runnable {
     }
 
     public void update() {
-
+        if (portal == null && ballooms.size() == 0) {
+            portal = new Portal(this);
+        }
         String message = player.update(tle.walls, bomb, tle.bricks);
         if (message.equals("Put a bomb!") && bomb == null) {
             bomb = new Bomb((player.x + tileSize / 2) / tileSize * tileSize, (player.y + tileSize / 2) / tileSize * tileSize, this);
@@ -137,16 +122,11 @@ public class PanelGame extends JPanel implements Runnable {
             //game_thread = null;
             System.exit(0);
         }
-
-//        for(int i = 0; i < 4; i++) {
-//            if (balloomList[i] != null) {
-//                balloomList[i].update(tle.walls, bomb, tle.bricks);
-//                player.check_crush_balloom(balloomList[i]);
-//                if (balloomList[i].spriteCounter > 100) {
-//                    balloomList[i] = null;
-//                }
-//            }
-//        }
+        if (portal != null) {
+            if (player.updateWin(portal)) {
+                System.exit(0);
+            }
+        }
 
         int idx = 0;
         while (idx < ballooms.size()) {
@@ -167,15 +147,14 @@ public class PanelGame extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D)g;
 
         tle.drawGrass(g2);
-//        for(int i = 0; i < 4; i++) {
-//            if (balloomList[i] != null) {
-//                balloomList[i].draw(g2);
-//            }
-//        }
+
         for (Balloom balloom : ballooms) {
             if (balloom != null) {
                 balloom.draw(g2);
             }
+        }
+        if (portal != null) {
+            portal.draw(g2);
         }
         if (bomb != null) {
             bomb.draw(g2);

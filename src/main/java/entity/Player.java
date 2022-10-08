@@ -2,6 +2,7 @@ package entity;
 
 
 import Maps.Brick;
+import Maps.Portal;
 import Maps.Wall;
 import Panel.*;
 
@@ -67,6 +68,9 @@ public class Player extends Entity {
         }
     }
 
+    public boolean updateWin(Portal p) {
+        return Math.abs(x - p.x) < 36 && Math.abs(y - p.y) < 36;
+    }
     @Override
     public String update(List<Wall> walls, Bomb bomb, List<Brick> bricks) {
         if (bomb != null) {
