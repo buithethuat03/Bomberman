@@ -14,6 +14,7 @@ public abstract class Entity {
     public String status;
 
     public BufferedImage up1, up2, up3, left1, left2, left3, down1, down2, down3, right1, right2, right3;
+    public BufferedImage dead1, dead2, dead3, dead4, dead5, dead6;
     public String direction;
 
     public int spriteCounter = 0;
