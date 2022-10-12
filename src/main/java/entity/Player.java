@@ -71,6 +71,9 @@ public class Player extends Entity {
         if (monster instanceof Balloom) {
             monster = (Balloom) monster;
         }
+        if (monster instanceof Kondoria) {
+            monster = (Kondoria) monster;
+        }
         if (Math.abs(monster.x - x) < gp.tileSize - 2 * speed && Math.abs(monster.y - y) < gp.tileSize - 2 * speed) {
             status = "dead";
         }
@@ -208,7 +211,6 @@ public class Player extends Entity {
 
         return "None";
     }
-
     @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;

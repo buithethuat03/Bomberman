@@ -1,31 +1,52 @@
 package entity;
 
 import Maps.Brick;
+import Maps.Grass;
 import Maps.Wall;
 import Panel.PanelGame;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 public class Balloom extends Entity {
     PanelGame gp;
     BufferedImage dead;
+
+    Random rand = new Random();
+    int[][] map = new int[13][31];
 
     public String status;
     public Balloom(PanelGame gp) {
         this.gp = gp;
         setDefaultValues();
         getBalloomImage();
+        loadmap();
     }
 
     public void setLocationAndDirection(int x, int y, String direction) {
         this.x = x;
         this.y = y;
         this.direction = direction;
+    }
+
+    private void loadmap() {
+        try {
+            File fileReader = new File("src/main/resources/data/map1.txt");
+            Scanner scanner = new Scanner(fileReader);
+            for (int i = 0;i < gp.maxScreenRow; i++) {
+                for(int j = 0; j < gp.maxScreenCol; j++) {
+                    map[i][j] = scanner.nextInt();
+                }
+            }
+            scanner.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
     void setDefaultValues() {
         x = 36;
@@ -53,6 +74,10 @@ public class Balloom extends Entity {
 
     @Override
     public String update(List<Wall> walls, Bomb bomb, List<Brick> bricks) {
+        //Toa do x, y trong ma tran
+        int idy = x / gp.tileSize;
+        int idx = y / gp.tileSize;
+
         if (bomb != null) {
             if (bomb.status.equals("exploding")) {
                 if (Math.abs(bomb.x - x) < gp.tileSize && Math.abs(bomb.y - y) < 2 * gp.tileSize
@@ -68,7 +93,6 @@ public class Balloom extends Entity {
                 for (Wall wall : walls) {
                     if (wall.x - x <= gp.tileSize - speed && wall.x - x >= -gp.tileSize + 4 && y - wall.y < gp.tileSize + speed && y - wall.y >= 0) {
                         can_up = false;
-                        direction = "down";
                         break;
                     }
                 }
@@ -76,7 +100,6 @@ public class Balloom extends Entity {
                 for (Brick brick : bricks) {
                     if (brick.x - x <= gp.tileSize - speed && brick.x - x >= -gp.tileSize + 4 && y - brick.y < gp.tileSize + speed && y - brick.y >= 0) {
                         can_up = false;
-                        direction = "down";
                         break;
                     }
                 }
@@ -84,7 +107,15 @@ public class Balloom extends Entity {
                 if (can_up && y >= speed && status.equals("live")) {
                     y -= speed;
                 } else {
-                    direction = "down";
+                    List<String> directionList = new ArrayList<>();
+                    directionList.add("down");
+                    if (map[idx][idy - 1] == 0) {
+                        directionList.add("left");
+                    }
+                    if (map[idx][idy + 1] == 0) {
+                        directionList.add("right");
+                    }
+                    direction = directionList.get(rand.nextInt(directionList.size()));
                 }
             }
             case "down" -> {
@@ -93,7 +124,6 @@ public class Balloom extends Entity {
                 for (Wall wall : walls) {
                     if (wall.x - x <= gp.tileSize - speed && wall.x - x >= -gp.tileSize + 4 && wall.y - y < gp.tileSize + speed && wall.y - y >= 0) {
                         can_down = false;
-                        direction = "up";
                         break;
                     }
                 }
@@ -101,7 +131,6 @@ public class Balloom extends Entity {
                 for (Brick brick : bricks) {
                     if (brick.x - x <= gp.tileSize - speed && brick.x - x >= -gp.tileSize + speed && brick.y - y < gp.tileSize + speed && brick.y - y >= 0) {
                         can_down = false;
-                        direction = "up";
                         break;
                     }
                 }
@@ -109,7 +138,15 @@ public class Balloom extends Entity {
                 if (can_down && y < (gp.tileSize * (gp.maxScreenRow - 1)) && status.equals("live")) {
                     y += speed;
                 } else {
-                    direction = "up";
+                    List<String> directionList = new ArrayList<>();
+                    directionList.add("up");
+                    if (map[idx][idy - 1] == 0) {
+                        directionList.add("left");
+                    }
+                    if (map[idx][idy + 1] == 0) {
+                        directionList.add("right");
+                    }
+                    direction = directionList.get(rand.nextInt(directionList.size()));
                 }
             }
             case "left" -> {
@@ -118,7 +155,6 @@ public class Balloom extends Entity {
                 for (Wall wall : walls) {
                     if (wall.y - y <= gp.tileSize - speed && wall.y - y >= -gp.tileSize + speed && x - wall.x < gp.tileSize + speed && x - wall.x >= 0) {
                         can_left = false;
-                        direction = "right";
                         break;
                     }
                 }
@@ -126,7 +162,6 @@ public class Balloom extends Entity {
                 for (Brick brick : bricks) {
                     if (brick.y - y <= gp.tileSize - speed && brick.y - y >= -gp.tileSize + speed && x - brick.x < gp.tileSize + speed && x - brick.x >= 0) {
                         can_left = false;
-                        direction = "right";
                         break;
                     }
                 }
@@ -134,7 +169,15 @@ public class Balloom extends Entity {
                 if (can_left && x >= speed && status.equals("live")) {
                     x -= speed;
                 } else {
-                    direction = "right";
+                    List<String> directionList = new ArrayList<>();
+                    directionList.add("right");
+                    if (map[idx - 1][idy] == 0) {
+                        directionList.add("up");
+                    }
+                    if (map[idx + 1][idy] == 0) {
+                        directionList.add("down");
+                    }
+                    direction = directionList.get(rand.nextInt(directionList.size()));
                 }
             }
             case "right" -> {
@@ -143,7 +186,6 @@ public class Balloom extends Entity {
                 for (Wall wall : walls) {
                     if (wall.y - y <= gp.tileSize - speed && wall.y - y >= -gp.tileSize + speed && wall.x - x < gp.tileSize + speed && wall.x - x >= 0) {
                         can_right = false;
-                        direction = "left";
                         break;
                     }
                 }
@@ -151,7 +193,6 @@ public class Balloom extends Entity {
                 for (Brick brick : bricks) {
                     if (brick.y - y <= gp.tileSize - speed && brick.y - y >= -gp.tileSize + speed && brick.x - x < gp.tileSize + speed && brick.x - x >= 0) {
                         can_right = false;
-                        direction = "left";
                         break;
                     }
                 }
@@ -159,7 +200,15 @@ public class Balloom extends Entity {
                 if (x < (gp.tileSize * (gp.maxScreenCol - 1)) && can_right && status.equals("live")) {
                     x += speed;
                 } else {
-                    direction = "left";
+                    List<String> directionList = new ArrayList<>();
+                    directionList.add("left");
+                    if (map[idx - 1][idy] == 0) {
+                        directionList.add("up");
+                    }
+                    if (map[idx + 1][idy] == 0) {
+                        directionList.add("down");
+                    }
+                    direction = directionList.get(rand.nextInt(directionList.size()));
                 }
             }
         }
