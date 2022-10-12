@@ -12,7 +12,6 @@ public class TileManager {
     PanelGame gp;
     public List<Grass> grasses = new ArrayList<>();
     public List<Wall> walls = new ArrayList<>();
-
     public List<Brick> bricks = new ArrayList<>();
     int[][] mapTileNum;
 

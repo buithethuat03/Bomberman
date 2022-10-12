@@ -1,5 +1,11 @@
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import Panel.PanelGame;
+import Panel.Sound;
+
+import java.io.IOException;
+
 public class MainGame {
 
     public static void main(String[] s) {
@@ -13,7 +19,14 @@ public class MainGame {
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
+        Sound sound = new Sound();
+        try {
+            sound.sound();
+        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         panel.startGameThread();
     }
 }

@@ -118,7 +118,7 @@ public class PanelGame extends JPanel implements Runnable {
 
         tle.updateBrick();
 
-        if (player.status.equals("dead")) {
+        if (player.status.equals("deaded")) {
             //game_thread = null;
             System.exit(0);
         }
@@ -132,7 +132,7 @@ public class PanelGame extends JPanel implements Runnable {
         while (idx < ballooms.size()) {
             if (ballooms.get(idx) != null) {
                 ballooms.get(idx).update(tle.walls, bomb, tle.bricks);
-                player.check_crush_balloom(ballooms.get(idx));
+                player.check_crush_monster(ballooms.get(idx));
                 if (ballooms.get(idx).spriteCounter > 100) {
                     ballooms.remove(idx);
                 } else {
@@ -155,6 +155,7 @@ public class PanelGame extends JPanel implements Runnable {
         }
         if (portal != null) {
             portal.draw(g2);
+            player.updateWin(portal);
         }
         if (bomb != null) {
             bomb.draw(g2);
