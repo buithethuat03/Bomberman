@@ -80,8 +80,8 @@ public class Balloom extends Entity {
 
         if (bomb != null) {
             if (bomb.status.equals("exploding")) {
-                if (Math.abs(bomb.x - x) < gp.tileSize && Math.abs(bomb.y - y) < 2 * gp.tileSize
-                || Math.abs(bomb.y - y) < gp.tileSize && Math.abs(bomb.x - x) < 2 * gp.tileSize) {
+                if (Math.abs(bomb.x - x) < gp.tileSize && Math.abs(bomb.y - y) < 2 * gp.tileSize - 2 * speed
+                        || Math.abs(bomb.y - y) < gp.tileSize && Math.abs(bomb.x - x) < 2 * gp.tileSize - 2 * speed) {
                     status = "dead";
                 }
             }

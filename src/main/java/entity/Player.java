@@ -68,12 +68,12 @@ public class Player extends Entity {
     }
 
     public void check_crush_monster(Entity monster) {
-        if (monster instanceof Balloom) {
-            monster = (Balloom) monster;
-        }
-        if (monster instanceof Kondoria) {
-            monster = (Kondoria) monster;
-        }
+//        if (monster instanceof Balloom) {
+//            monster = (Balloom) monster;
+//        }
+//        if (monster instanceof Kondoria) {
+//            monster = (Kondoria) monster;
+//        }
         if (Math.abs(monster.x - x) < gp.tileSize - 2 * speed && Math.abs(monster.y - y) < gp.tileSize - 2 * speed) {
             status = "dead";
         }
@@ -86,7 +86,8 @@ public class Player extends Entity {
         if (!status.equals("dead")) {
             if (bomb != null) {
                 if (bomb.status.equals("exploding")) {
-                    if (Math.abs(bomb.x - x) < gp.tileSize - 3 * speed && Math.abs(bomb.y - y) < 2 * gp.tileSize -  3 * speed
+                    //TODO: Can phai sua lai va cham voi bomb
+                    if (Math.abs(bomb.x - x) < gp.tileSize - 3 * speed && Math.abs(bomb.y - y) < 2 * gp.tileSize -  4 * speed
                             || Math.abs(bomb.y - y) < gp.tileSize - 3 * speed && Math.abs(bomb.x - x) < 2 * gp.tileSize - 3 * speed) {
                         status = "dead";
                         spriteNum = 1;
