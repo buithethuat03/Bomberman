@@ -12,9 +12,9 @@
   
 	- Thành viên:
 
-	+ 21020791 - Nguyễn Quang Thành
+		+ 21020791 - Nguyễn Quang Thành
               
-	+ 21020799 - Triệu Thanh Tùng 
+		+ 21020799 - Triệu Thanh Tùng 
  
 - Ngôn ngữ sử dụng: Java swing
 
