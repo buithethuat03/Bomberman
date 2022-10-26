@@ -30,7 +30,7 @@
 
   - Enemy là các đối tượng mà Bomber phải tiêu diệt hết để có thể qua Level. Enemy có thể di chuyển ngẫu nhiên hoặc tự đuổi theo Bomber tùy theo loại Enemy. Các loại Enemy sẽ được mô tả cụ thể ở phần dưới.
 
-  - Bomb là đối tượng mà Bomber sẽ đặt và kích hoạt tại các ô Grass.
+  - Bomb là đối tượng mà Bomber ấn SPACE để đặt và kích hoạt tại các ô Grass.
 
   - Grass là đối tượng mà Bomber và Enemy có thể di chuyển xuyên qua, và cho phép đặt Bomb lên vị trí của nó
 
