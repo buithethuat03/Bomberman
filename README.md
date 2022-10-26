@@ -1,6 +1,6 @@
 # Bomberman
 
-##1. Giới thiệu
+**1. Giới thiệu**
   
 - Tên game: Bomberman
 
@@ -8,13 +8,13 @@
 
 - Tên các thành viên trong nhóm: 
     
-  * Nhóm trưởng:  21020796 - Bùi Thế Thuật
+  - Nhóm trưởng:  21020796 - Bùi Thế Thuật
   
-  * Thành viên:
+  - Thành viên:
 
-	*21020791 - Nguyễn Quang Thành
+	- 21020791 - Nguyễn Quang Thành
               
-        *21020799 - Triệu Thanh Tùng 
+        - 21020799 - Triệu Thanh Tùng 
  
 - Ngôn ngữ sử dụng: Java swing
 
@@ -22,9 +22,9 @@
 
 - Âm thanh : nhóm em lấy ở trên mạng 
 
-##2. Cách chơi & luật chơi
+**2. Cách chơi & luật chơi**
 
-###2.1. Cách chơi: 
+2.1. Cách chơi: 
 
   - Bomber là nhân vật chính của trò chơi. Bomber có thể di chuyển theo 4 hướng trái/phải/lên/xuống (A/D/W/S) theo sự điều khiển của người chơi.
 
@@ -56,7 +56,7 @@ Các Item cũng được giấu phía sau Brick và chỉ hiện ra khi Brick b�
   
   - Điều kiện thua: Hết mạng
   
-3. Các thuật toán được sử dụng trong game
+**3. Các thuật toán được sử dụng trong game**
 
   - Thuật toán A* - Pathfinding
   
@@ -64,23 +64,26 @@ Các Item cũng được giấu phía sau Brick và chỉ hiện ra khi Brick b�
 
   - Thuật toán sinh ngẫu nhiên đường đi
 
-4. Các chức năng đã cài đặt
+**4. Các chức năng đã cài đặt**
 
   - Bản đồ, nhạc, sound effect
 
   - Menu
 
-  - Quái vật: - Ballom (di chuyển ngẫu nhiên)
+  - Quái vật:
+
+	- Ballom (di chuyển ngẫu nhiên)
               
-              - Korondia (di chuyển ngẫu nhiên, có khả năng đi xuyên tường)
+        - Korondia (di chuyển ngẫu nhiên, có khả năng đi xuyên tường)
               
-              - Oneal (di chuyển ngẫu nhiên nếu nhân vật ở xa hơn một khoảng cách nhất định hoặc không có đường đi từ bản thân nó đến nhân vật, hoặc ngược lại thì sẽ đuổi theo nhân vật)
+        - Oneal (di chuyển ngẫu nhiên nếu nhân vật ở xa hơn một khoảng cách nhất định hoặc không có đường đi từ bản thân nó đến nhân vật, hoặc ngược lại thì sẽ đuổi theo nhân vật)
               
-              - Ovape (giống oneal nhưng có khả năng đi xuyên tường)
+        - Ovape (giống oneal nhưng có khả năng đi xuyên tường)
               
   - Item:
-	*SpeedItem (tăng tốc người chơi)
+
+	- SpeedItem (tăng tốc người chơi)
   
-     	*BombItem  (tăng số lượng bom có thể đặt đồng thời)
+     	- BombItem  (tăng số lượng bom có thể đặt đồng thời)
           
-      	*FlameItem (tăng độ rộng của bom)
+      	- FlameItem (tăng độ rộng của bom)
