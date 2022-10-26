@@ -12,9 +12,9 @@
   
 	- Thành viên:
 
-		- 21020791 - Nguyễn Quang Thành
+		+ 21020791 - Nguyễn Quang Thành
               
-        	- 21020799 - Triệu Thanh Tùng 
+        	+ 21020799 - Triệu Thanh Tùng 
  
 - Ngôn ngữ sử dụng: Java swing
 
@@ -72,18 +72,18 @@
 
   - Quái vật:
 
-		- Ballom (di chuyển ngẫu nhiên)
+	+ Ballom (di chuyển ngẫu nhiên)
               
-		- Korondia (di chuyển ngẫu nhiên, có khả năng đi xuyên tường)
+	+ Korondia (di chuyển ngẫu nhiên, có khả năng đi xuyên tường)
               
-		- Oneal (di chuyển ngẫu nhiên nếu nhân vật ở xa hơn một khoảng cách nhất định hoặc không có đường đi từ bản thân nó đến nhân vật, hoặc ngược lại thì sẽ đuổi theo nhân vật)
+	+ Oneal (di chuyển ngẫu nhiên nếu nhân vật ở xa hơn một khoảng cách nhất định hoặc không có đường đi từ bản thân nó đến nhân vật, hoặc ngược lại thì sẽ đuổi theo nhân vật)
               
 		- Ovape (giống oneal nhưng có khả năng đi xuyên tường)
               
   - Item:
 
-		- SpeedItem (tăng tốc người chơi)
+	+ SpeedItem (tăng tốc người chơi)
   
-		- BombItem  (tăng số lượng bom có thể đặt đồng thời)
+	+ BombItem  (tăng số lượng bom có thể đặt đồng thời)
           
-		- FlameItem (tăng độ rộng của bom)
+	+ FlameItem (tăng độ rộng của bom)
