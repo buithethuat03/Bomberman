@@ -12,9 +12,9 @@
   
 	- Thành viên:
 
-		+ 21020791 - Nguyễn Quang Thành
+	+ 21020791 - Nguyễn Quang Thành
               
-        	+ 21020799 - Triệu Thanh Tùng 
+	+ 21020799 - Triệu Thanh Tùng 
  
 - Ngôn ngữ sử dụng: Java swing
 
@@ -78,7 +78,7 @@
               
 	+ Oneal (di chuyển ngẫu nhiên nếu nhân vật ở xa hơn một khoảng cách nhất định hoặc không có đường đi từ bản thân nó đến nhân vật, hoặc ngược lại thì sẽ đuổi theo nhân vật)
               
-		- Ovape (giống oneal nhưng có khả năng đi xuyên tường)
+	+ Ovape (giống oneal nhưng có khả năng đi xuyên tường)
               
   - Item:
 
