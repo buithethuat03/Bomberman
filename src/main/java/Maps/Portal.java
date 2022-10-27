@@ -1,28 +1,26 @@
 package Maps;
 
 import Panel.PanelGame;
-
+import item.Item;
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
-public class Portal extends object {
+public class Portal extends Item {
     PanelGame panel;
 
-    public Portal(PanelGame gp) {
+    public Portal(PanelGame gp, String path) {
         this.panel = gp;
-        setDefaultValues();
         getImage();
+        setRandomLocation(path);
+    }
+    @Override
+    public void updateItem() {
+
     }
 
-    private void setDefaultValues() {
-        this.x = 36;
-        this.y = 108;
-    }
-
-    private void getImage() {
+    public void getImage() {
         try {
             normal = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("portal/portal.png")));
         } catch (IOException e) {
@@ -31,8 +29,13 @@ public class Portal extends object {
     }
 
     @Override
-    public void draw(Graphics2D g2) {
-        BufferedImage image = normal;
-        g2.drawImage(image, x, y, PanelGame.tileSize, PanelGame.tileSize, null);
+    public void setLocation(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    @Override
+    public void drawItem(Graphics2D g2) {
+        g2.drawImage(normal, x, y, PanelGame.tileSize, PanelGame.tileSize, null);
     }
 }

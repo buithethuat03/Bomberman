@@ -23,9 +23,6 @@ public class PanelGame extends JPanel implements Runnable {
     public static final int maxScreenRow = 14;
     public final int screen_width = maxScreenCol * tileSize;
     public final int screen_height = maxScreenRow * tileSize;
-
-    //public boolean activeBomb;
-    //public String message;
     private int level = 0;
     public String[] pathMap = {"src/main/resources/data/map1.txt"
             , "src/main/resources/data/map2.txt"};
@@ -252,7 +249,7 @@ public class PanelGame extends JPanel implements Runnable {
         if (gameState == playState) {
             //Create a portal if enemies = 0
             if (portal == null && enemies.size() == 0) {
-                portal = new Portal(this);
+                portal = new Portal(this, pathMap[level]);
             }
 
             //Player put a bomb!
@@ -322,7 +319,7 @@ public class PanelGame extends JPanel implements Runnable {
             tle.drawGrass(g2);
             // vẽ portal
             if (portal != null) {
-                portal.draw(g2);
+                portal.drawItem(g2);
                 player.updateWin(portal);
             }
 

@@ -238,7 +238,7 @@ public class Player extends Entity {
     }
 
     public boolean updateWin(Portal p) {
-        return Math.abs(x - p.getX()) < 36 && Math.abs(y - p.getY()) < 36;
+        return Math.abs(x - p.getX()) < 18 && Math.abs(y - p.getY()) < 18;
     }
 
     public void bomb_Dis_Brick() {

@@ -15,6 +15,7 @@ public abstract class Item {
     protected PanelGame gp;
     protected int x;
     protected int y;
+
     protected BufferedImage normal;
     protected int[][] map;
 
@@ -23,7 +24,13 @@ public abstract class Item {
 
     public abstract void getImage();
 
+    public int getX() {
+        return x;
+    }
 
+    public int getY() {
+        return y;
+    }
     public void setRandomLocation(String path) {
         List<Pointer> pointerList = new ArrayList<>();
         map = new int[PanelGame.maxScreenRow][PanelGame.maxScreenCol];
