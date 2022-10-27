@@ -19,7 +19,7 @@ public class Portal extends object {
 
     private void setDefaultValues() {
         this.x = 36;
-        this.y = 36;
+        this.y = 108;
     }
 
     private void getImage() {
@@ -33,6 +33,6 @@ public class Portal extends object {
     @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = normal;
-        g2.drawImage(image, x, y, panel.tileSize, panel.tileSize, null);
+        g2.drawImage(image, x, y, PanelGame.tileSize, PanelGame.tileSize, null);
     }
 }

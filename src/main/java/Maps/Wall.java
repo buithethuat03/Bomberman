@@ -13,11 +13,11 @@ public class Wall extends object {
 
     public Wall(PanelGame panel) {
         this.panel = panel;
-       setDefaultValues();
-       getImage();
+        setDefaultValues();
+        getImage();
     }
 
-    public void setLocation(int x,int y) {
+    public void setLocation(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -30,13 +30,13 @@ public class Wall extends object {
     void getImage() {
         try {
             normal = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("wall/wall.png")));
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void draw(Graphics2D g2) {
         BufferedImage image = normal;
-        g2.drawImage(image, x, y, panel.tileSize, panel.tileSize, null);
+        g2.drawImage(image, x, y, PanelGame.tileSize, PanelGame.tileSize, null);
     }
 }

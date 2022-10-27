@@ -1,5 +1,6 @@
 package Maps;
 
+import Maps.Flame.Flame;
 import Panel.PanelGame;
 import entity.Bomb;
 
@@ -10,17 +11,25 @@ import java.util.Objects;
 
 public class Brick extends object {
 
-    PanelGame panel;
-    BufferedImage normal, explode1, explode2, explode3;
-
-    public int spriteCounter = 0;
-    public int spriteNum = 1;
-    public String status;
+    private PanelGame gp;
+    private BufferedImage normal, explode1, explode2, explode3;
+    private int spriteCounter = 0;
+    private int spriteNum = 1;
+    private String status;
+    private boolean check = true;
 
     public Brick(PanelGame gp) {
-        this.panel = gp;
+        this.gp = gp;
         setupNewFragileWall();
         getImage();
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
     public void setLocation(int x, int y) {
         this.x = x;
@@ -29,29 +38,44 @@ public class Brick extends object {
 
     void getImage() {
         try {
-            normal = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("brick/brick.png")));
+            if (gp.mode.equals("day")) {
+                normal = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("brick/brick.png")));
+            } else if (gp.mode.equals("night")) {
+                normal = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("brick/brick_night.png")));
+            }
             explode1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("brick/brick_exploded.png")));
             explode2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("brick/brick_exploded1.png")));
             explode3 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("brick/brick_exploded2.png")));
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     public void updateWaitBreaking(Bomb bomb) {
-        if (bomb.status.equals("exploding") && status.equals("normal")) {
-            if (Math.abs(bomb.y - y) == panel.tileSize && bomb.x == x ||
-            Math.abs(bomb.x - x) == panel.tileSize && bomb.y == y ||
-            bomb.x == x && bomb.y == y) {
-                status = "breaking";
+        if (bomb.getStatus().equals("exploding") && status.equals("normal")) {
+            for (Flame flame : bomb.flameList) {
+                if (Math.abs(flame.y - y) == 0 && Math.abs(flame.x - x) == 0) {
+                    status = "breaking";
+                    break;
+                }
             }
         }
     }
 
     public void updateBreaking() {
         if (status.equals("breaking")) {
+            if(check) {
+                try {
+                    gp.sound.brickbroken();
+                } catch (
+                        Exception e) {
+                    e.printStackTrace();
+                }
+                check = false;
+            }
+
             spriteCounter++;
-            if (spriteCounter > 30) {
+            if (spriteCounter > 10) {
                 spriteNum++;
                 if (spriteNum > 3) {
                     status = "broken";
@@ -60,6 +84,7 @@ public class Brick extends object {
             }
         }
     }
+
     void setupNewFragileWall() {
         x = 0;
         y = 0;
@@ -69,10 +94,8 @@ public class Brick extends object {
     @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
-        switch(status) {
-            case "normal" -> {
-                image = normal;
-            }
+        switch (status) {
+            case "normal" -> image = normal;
             case "breaking" -> {
                 if (spriteNum == 1) image = explode1;
                 if (spriteNum == 2) image = explode2;
@@ -80,7 +103,7 @@ public class Brick extends object {
             }
         }
         if (image != null) {
-            g2.drawImage(image, x, y, panel.tileSize, panel.tileSize, null);
+            g2.drawImage(image, x, y, PanelGame.tileSize, PanelGame.tileSize, null);
         }
     }
 }

@@ -16,17 +16,8 @@ public class MainGame {
         PanelGame panel = new PanelGame();
         frame.add(panel);
         frame.pack();
-
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        Sound sound = new Sound();
-        try {
-            sound.sound();
-        } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         panel.startGameThread();
     }
 }

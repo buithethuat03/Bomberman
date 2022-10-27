@@ -1,8 +1,6 @@
 package entity;
 
 import Maps.Brick;
-import Maps.Grass;
-import Maps.Wall;
 import Panel.PanelGame;
 
 import javax.imageio.ImageIO;
@@ -13,19 +11,19 @@ import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
-public class Balloom extends Entity {
-    PanelGame gp;
-    BufferedImage dead;
-
-    Random rand = new Random();
-    int[][] map = new int[13][31];
-
-    public String status;
+public class Balloom extends Enemy {
     public Balloom(PanelGame gp) {
         this.gp = gp;
+        solidArea = new Rectangle();
+        // hix_box //
+        solidArea.x = 1;
+        solidArea.y = 1;
+        solidArea.width = 34;
+        solidArea.height = 34;
+        //========//
         setDefaultValues();
-        getBalloomImage();
-        loadmap();
+        getImage();
+        loadmap(gp.pathMap[gp.getLevel()]);
     }
 
     public void setLocationAndDirection(int x, int y, String direction) {
@@ -34,29 +32,30 @@ public class Balloom extends Entity {
         this.direction = direction;
     }
 
-    private void loadmap() {
+    private void loadmap(String path) {
         try {
-            File fileReader = new File("src/main/resources/data/map1.txt");
+            File fileReader = new File(path);
             Scanner scanner = new Scanner(fileReader);
-            for (int i = 0;i < gp.maxScreenRow; i++) {
-                for(int j = 0; j < gp.maxScreenCol; j++) {
+            for (int i = 0; i < PanelGame.maxScreenRow; i++) {
+                for (int j = 0; j < PanelGame.maxScreenCol; j++) {
                     map[i][j] = scanner.nextInt();
                 }
             }
             scanner.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     void setDefaultValues() {
         x = 36;
-        y = 36;
+        y = 72;
         speed = 1;
         direction = "right";
         status = "live";
     }
 
-    void getBalloomImage() {
+    public void getImage() {
         try {
             left1 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("balloom/balloom_left1.png")));
             left2 = ImageIO.read(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("balloom/balloom_left2.png")));
@@ -73,156 +72,110 @@ public class Balloom extends Entity {
     }
 
     @Override
-    public String update(List<Wall> walls, Bomb bomb, List<Brick> bricks) {
+    public String update(List<Bomb> bombs, List<Brick> bricks) {
         //Toa do x, y trong ma tran
-        int idy = x / gp.tileSize;
-        int idx = y / gp.tileSize;
+        int idy = x / PanelGame.tileSize;
+        int idx = y / PanelGame.tileSize;
 
-        if (bomb != null) {
-            if (bomb.status.equals("exploding")) {
-                if (Math.abs(bomb.x - x) < gp.tileSize && Math.abs(bomb.y - y) < 2 * gp.tileSize - 2 * speed
-                        || Math.abs(bomb.y - y) < gp.tileSize && Math.abs(bomb.x - x) < 2 * gp.tileSize - 2 * speed) {
-                    status = "dead";
-                }
-            }
-        }
-        switch (direction) {
-            case "up" -> {
-                spriteCounter++;
-                boolean can_up = true;
-                for (Wall wall : walls) {
-                    if (wall.x - x <= gp.tileSize - speed && wall.x - x >= -gp.tileSize + 4 && y - wall.y < gp.tileSize + speed && y - wall.y >= 0) {
-                        can_up = false;
-                        break;
-                    }
-                }
+        if (status.equals("live")) {
+            gp.checker.checkBomb(this, bombs);
 
-                for (Brick brick : bricks) {
-                    if (brick.x - x <= gp.tileSize - speed && brick.x - x >= -gp.tileSize + 4 && y - brick.y < gp.tileSize + speed && y - brick.y >= 0) {
-                        can_up = false;
-                        break;
-                    }
-                }
+            // CHECK TILE COLLISION
+            collisionOn = false;
+            gp.checker.checkTile(this);
+            // IF COLLISION IS FALSE AND LIVE BALLOOM CAN MOVE
 
-                if (can_up && y >= speed && status.equals("live")) {
-                    y -= speed;
-                } else {
-                    List<String> directionList = new ArrayList<>();
-                    directionList.add("down");
-                    if (map[idx][idy - 1] == 0) {
-                        directionList.add("left");
+            if (!collisionOn && status.equals("live")) {
+                switch (direction) {
+                    case "up" -> {
+                        spriteCounter++;
+                        y -= speed;
                     }
-                    if (map[idx][idy + 1] == 0) {
-                        directionList.add("right");
+                    case "down" -> {
+                        spriteCounter++;
+                        y += speed;
                     }
-                    direction = directionList.get(rand.nextInt(directionList.size()));
-                }
-            }
-            case "down" -> {
-                spriteCounter++;
-                boolean can_down = true;
-                for (Wall wall : walls) {
-                    if (wall.x - x <= gp.tileSize - speed && wall.x - x >= -gp.tileSize + 4 && wall.y - y < gp.tileSize + speed && wall.y - y >= 0) {
-                        can_down = false;
-                        break;
+                    case "left" -> {
+                        spriteCounter++;
+                        x -= speed;
+                    }
+                    case "right" -> {
+                        spriteCounter++;
+                        x += speed;
                     }
                 }
-
-                for (Brick brick : bricks) {
-                    if (brick.x - x <= gp.tileSize - speed && brick.x - x >= -gp.tileSize + speed && brick.y - y < gp.tileSize + speed && brick.y - y >= 0) {
-                        can_down = false;
-                        break;
-                    }
-                }
-
-                if (can_down && y < (gp.tileSize * (gp.maxScreenRow - 1)) && status.equals("live")) {
-                    y += speed;
-                } else {
-                    List<String> directionList = new ArrayList<>();
-                    directionList.add("up");
-                    if (map[idx][idy - 1] == 0) {
-                        directionList.add("left");
-                    }
-                    if (map[idx][idy + 1] == 0) {
-                        directionList.add("right");
-                    }
-                    direction = directionList.get(rand.nextInt(directionList.size()));
-                }
-            }
-            case "left" -> {
-                spriteCounter++;
-                boolean can_left = true;
-                for (Wall wall : walls) {
-                    if (wall.y - y <= gp.tileSize - speed && wall.y - y >= -gp.tileSize + speed && x - wall.x < gp.tileSize + speed && x - wall.x >= 0) {
-                        can_left = false;
-                        break;
-                    }
-                }
-
-                for (Brick brick : bricks) {
-                    if (brick.y - y <= gp.tileSize - speed && brick.y - y >= -gp.tileSize + speed && x - brick.x < gp.tileSize + speed && x - brick.x >= 0) {
-                        can_left = false;
-                        break;
-                    }
-                }
-
-                if (can_left && x >= speed && status.equals("live")) {
-                    x -= speed;
-                } else {
-                    List<String> directionList = new ArrayList<>();
-                    directionList.add("right");
-                    if (map[idx - 1][idy] == 0) {
-                        directionList.add("up");
-                    }
-                    if (map[idx + 1][idy] == 0) {
+            } else {
+                switch (direction) {
+                    case "up" -> {
+                        spriteCounter++;
+                        List<String> directionList = new ArrayList<>();
+                        y+= solidArea.y + speed;
                         directionList.add("down");
-                    }
-                    direction = directionList.get(rand.nextInt(directionList.size()));
-                }
-            }
-            case "right" -> {
-                spriteCounter++;
-                boolean can_right = true;
-                for (Wall wall : walls) {
-                    if (wall.y - y <= gp.tileSize - speed && wall.y - y >= -gp.tileSize + speed && wall.x - x < gp.tileSize + speed && wall.x - x >= 0) {
-                        can_right = false;
-                        break;
-                    }
-                }
+                        if (map[y / PanelGame.tileSize][idy - 1] == 0) {
+                            directionList.add("left");
+                        }
+                        if (map[y / PanelGame.tileSize][idy + 1] == 0) {
+                            directionList.add("right");
+                        }
+                        direction = directionList.get(rand.nextInt(directionList.size()));
 
-                for (Brick brick : bricks) {
-                    if (brick.y - y <= gp.tileSize - speed && brick.y - y >= -gp.tileSize + speed && brick.x - x < gp.tileSize + speed && brick.x - x >= 0) {
-                        can_right = false;
-                        break;
                     }
-                }
-
-                if (x < (gp.tileSize * (gp.maxScreenCol - 1)) && can_right && status.equals("live")) {
-                    x += speed;
-                } else {
-                    List<String> directionList = new ArrayList<>();
-                    directionList.add("left");
-                    if (map[idx - 1][idy] == 0) {
+                    case "down" -> {
+                        spriteCounter++;
+                        List<String> directionList = new ArrayList<>();
                         directionList.add("up");
+                        if (map[idx][idy - 1] == 0) {
+                            directionList.add("left");
+                        }
+                        if (map[idx][idy + 1] == 0) {
+                            directionList.add("right");
+                        }
+                        direction = directionList.get(rand.nextInt(directionList.size()));
                     }
-                    if (map[idx + 1][idy] == 0) {
-                        directionList.add("down");
+                    case "left" -> {
+                        spriteCounter++;
+                        List<String> directionList = new ArrayList<>();
+                        x += solidArea.x + speed;
+                        directionList.add("right");
+                        if (map[idx - 1][x / PanelGame.tileSize] == 0) {
+                            directionList.add("up");
+                        }
+                        if (map[idx + 1][x/PanelGame.tileSize] == 0) {
+                            directionList.add("down");
+                        }
+
+                        direction = directionList.get(rand.nextInt(directionList.size()));
                     }
-                    direction = directionList.get(rand.nextInt(directionList.size()));
+                    case "right" -> {
+                        spriteCounter++;
+                        List<String> directionList = new ArrayList<>();
+                        directionList.add("left");
+                        if (map[idx - 1][idy] == 0) {
+                            directionList.add("up");
+                        }
+                        if (map[idx + 1][idy] == 0) {
+                            directionList.add("down");
+                        }
+                        direction = directionList.get(rand.nextInt(directionList.size()));
+
+                    }
                 }
             }
-        }
-        if (spriteCounter > 6 && status.equals("live")) {
-            if (spriteNum < 3) {
-                spriteNum++;
-            } else if (spriteNum == 3){
-                spriteNum = 1;
-            }
-            spriteCounter = 0;
-        }
 
-        if (status.equals("dead")) {
+            if (spriteCounter > 6) {
+                if (spriteNum < 3) {
+                    spriteNum++;
+                } else if (spriteNum == 3) {
+                    spriteNum = 1;
+                }
+                spriteCounter = 0;
+            }
+
+        } else if (status.equals("dead")) {
             spriteCounter++;
+            if(spriteCounter == 45) {
+                gp.point += 100;
+            }
         }
         return "None";
     }
@@ -243,10 +196,9 @@ public class Balloom extends Entity {
                     if (spriteNum == 3) image = right3;
                 }
             }
-        }
-        else {
+        } else {
             image = dead;
         }
-        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(image, x, y, PanelGame.tileSize, PanelGame.tileSize, null);
     }
 }
